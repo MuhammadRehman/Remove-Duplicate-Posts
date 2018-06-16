@@ -1,0 +1,173 @@
+.rdp-main-screen-wrapper {
+    background-color: white;
+    min-height: 500px;
+    padding: 10px;
+}
+
+.rdp-main-screen-content {
+    margin: 62px 12px;
+}
+
+.rdp-title {
+    font-size: 34px;
+    text-align: center;
+    font-weight: 100;
+}
+
+.rdp-select-post {
+    text-align: center;
+    margin: 26px 0px;
+    border-bottom: solid 1px #f3f3f3;
+}
+
+.rdp-select-post select {
+    font-size: 20px;
+    padding: 6px;
+    margin: 5px;
+    height: 44px;
+    width: 35%;
+    border-radius: 18px;
+}
+
+input.rdp-btn {
+    background-color: #5fef5f;
+    border: none;
+    color: white;
+    padding: 8px;
+    border-radius: 10px;
+    font-size: 17px;
+    height: 42px;
+    cursor: pointer;
+}
+
+.rdp-dpl-product-title {
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: solid 1px #CCC;
+    margin: 4px;
+    padding: 4px;
+}
+
+.rdp-actions {
+    width: auto;
+    text-align: center;
+    display: none;
+    border-top: solid 2px #CCC;
+    margin: 50px 0px;
+}
+
+.rdp-actions .rdp-btn {
+    margin: 10px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.rdp-delt-permanently {
+    background-color: #dc3232;
+    padding: 10px;
+    color: white;
+    font-size: 16px;
+}
+
+.rdp-move-trash {
+    background-color: #38bd38;
+    padding: 10px;
+    color: white;
+    font-size: 16px;
+}
+
+.rdp-notice {
+    color: gray;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.rdp-success {
+    display: none;
+    padding: 10px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.drp-response {
+    font-size: 24px;
+    text-align: center;
+    padding: 30px 0px;
+}
+
+.rdp-loader {
+    text-align: center;
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 40%;
+}
+
+.rdp-adv-setting {
+    display: flex;
+    width: 10%;
+    margin-left: 51%;
+    text-decoration: underline;
+    margin: 5px 51%;
+    color: green;
+    cursor: pointer;
+}
+
+.rdp-adv-setting-content {
+    display: none;
+}
+
+.rdp-result {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    max-height: 300px;
+    overflow-y: scroll;
+    box-shadow: 0px 0px 4px #CCC;
+    display: none;
+}
+
+.rdp-progress-bar {
+    width: 100%;
+    height: 34px;
+    background-color: whitesmoke;
+    border-radius: 20px;
+    box-shadow: 0px 0px 3px #CCC;
+}
+
+.rdp-progess {
+    width: 100%;
+    height: 70px;
+    margin-top: 10px;
+    display: none;
+}
+
+.rdp-progress-fill {
+    text-align: center;
+    width: 50%;
+    background-color: #38bd38;
+    height: 35px;
+    border-radius: 20px;
+    color: white;
+    font-size: 20px;
+    line-height: 34px;
+}
+
+select#rdp-post-status {
+    padding: 6px;
+    height: 30px;
+    font-size: 14px;
+    border-radius: 5px;
+    width: 14%;
+}
+
+input#rdp-title-contains {
+    border-radius: 7px;
+    font-size: 14px;
+    padding: 5px;
+}
+
+.rdp-lbl {
+    font-weight: bold;
+}
