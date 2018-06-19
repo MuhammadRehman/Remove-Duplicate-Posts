@@ -1,9 +1,9 @@
 === Remove Duplicate Posts ===
 Contributors: Muhammad Rehman
-Tags: delete duplicate posts, remove duplicate posts, delete posts, remove posts, bull delete posts
+Tags: delete duplicate posts, remove duplicate posts, delete posts, remove posts, bulk delete posts
 Requires at least: 4.0
 Tested up to: 4.9.6
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2
 License URI: GPLv2
 
@@ -30,6 +30,9 @@ If successful, click Activate Plugin to activate it, or Return to Plugin Install
 5. Duplicate Posts Removed
 
 == Changelog ==
+
+= 1.0.1 =
+- Bug Fixed | removing limited duplicate posts issue fixed
 
 = 1.0.0 =
 - Initial release.

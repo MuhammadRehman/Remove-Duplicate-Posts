@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Remove Duplicate Posts
- * Version: 1.0.0
+ * Version: 1.0.1
  * Description: You can easily remove duplicate posts of your site with one click. Just you need to select a post type which you want to remove the duplicates, and hit the delete button. This will remove all your duplicate posts with clean way.
  * Author: Muhammad Rehman
  * Author URI: http://muhammadrehman.com/

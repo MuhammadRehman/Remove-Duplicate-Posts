@@ -113,6 +113,7 @@ Class RDP_Main_Screen {
             } else {
                 $args = array(
                     'post_type' => $selected_post_type,
+                    'posts_per_page' => -1
                 );
             }
 
