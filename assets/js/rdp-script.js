@@ -34,20 +34,39 @@ jQuery(document).ready(function($) {
         rdp_delete_posts( 0 );
     });
 
-    var ajax_interval = 0; var counter = 0;
+    var counter = 0;
     function rdp_delete_posts( index_num ) {
 
         counter = index_num;
 
+        // how many rows delete per query
+        var per_request_delete = 5;
+
+        // show loader
         rdp_show_loader();
 
+        // Getting all the duplicate ids
         var rdp_duplicate_ids = jQuery('#rdp-duplicate-ids').val();
 
+        // string ids to array
         rdp_duplicate_ids = rdp_duplicate_ids.split(',');
 
-        var dp_id = rdp_duplicate_ids[index_num];
+        // Initaite empty duplicate ids or no duplicate ids
+        var dp_id = '';
 
-        ajax_interval += ajax_interval + 1000;
+        if( rdp_duplicate_ids.length > 0 ) { // If duplicate founds
+            var range_to_delete = index_num + per_request_delete; // calculate how many data to be removed
+            for( var i = index_num; i <= range_to_delete; i++  ) { // loop
+                if( rdp_duplicate_ids[index_num] != '' ) {
+                    if( typeof rdp_duplicate_ids[index_num] != 'undefined' ) { // if array has value
+                        dp_id += rdp_duplicate_ids[index_num]+',';
+                        index_num = i;
+                    }
+                }
+            }
+        }
+
+        counter = index_num; // set counter to recall ajax with next query
 
         var data = {
             'action': 'rdp_ajax_process',
@@ -56,30 +75,39 @@ jQuery(document).ready(function($) {
             'target': 'remove_duplicates_posts'
         };
 
-        jQuery.post(ajaxurl, data, function(response) {
-            counter++;
-            rdp_hide_loader();
+        if( dp_id != '' ) { // If found duplicate ids
 
-            var percent = ( counter / rdp_duplicate_ids.length ) * 100;
-            percent = percent.toFixed(2);
+            jQuery.post(ajaxurl, data, function(response) {
+                //counter++;
+                rdp_hide_loader();
 
-            if( percent <= 100 ) {
-                jQuery('.rdp-progess').show();
-                jQuery('.rdp-progress-fill').text( percent + '%');
-                jQuery('.rdp-progress-fill').css( 'width',percent+'%' );
-            }
+                // SetUp progress bar
+                var percent = ( counter / rdp_duplicate_ids.length ) * 100;
+                percent = percent.toFixed(2);
 
-            if( counter <= rdp_duplicate_ids.length )
-                rdp_delete_posts( counter );
+                if( percent <= 100 ) {
+                    jQuery('.rdp-progess').show();
+                    jQuery('.rdp-progress-fill').text( percent + '%');
+                    jQuery('.rdp-progress-fill').css( 'width',percent+'%' );
+                }
 
-            if( counter == rdp_duplicate_ids.length ) {
-                jQuery('.rdp-result').hide();
-                jQuery('.rdp-message').html('<div class="rdp-success">All duplicate posts have been removed</div>');
-                jQuery('.rdp-success').fadeIn();
-                jQuery('.rdp-progess').hide();
-                jQuery('.rdp-actions').hide();
-            }
-        });
+                if( counter <= rdp_duplicate_ids.length )
+                    rdp_delete_posts( counter );
+
+                if( counter == rdp_duplicate_ids.length ) {
+                    setTimeout(function () {
+                        jQuery('.rdp-result').hide();
+                        jQuery('.rdp-message').html('<div class="rdp-success">All duplicate posts have been removed</div>');
+                        jQuery('.rdp-success').fadeIn();
+                        jQuery('.rdp-actions').hide();
+                        jQuery('.rdp-loader').hide();
+                        setTimeout(function () {
+                            jQuery('.rdp-progess').fadeOut();
+                        },3000);
+                    },2000);
+                }
+            });
+        }
     }
 
     jQuery('.rdp-adv-setting').click(function () {

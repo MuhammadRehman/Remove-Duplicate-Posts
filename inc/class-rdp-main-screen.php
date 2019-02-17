@@ -8,6 +8,7 @@ Class RDP_Main_Screen {
     function __construct() {
         add_action( 'admin_menu', array($this,'rdp_add_admin_menu') );
         add_action( 'wp_ajax_rdp_ajax_process', array($this,'rdp_ajax_process') );
+        add_filter( "plugin_action_links_".RDP_PLUGIN_BASENAME, array($this,'rdp_settling_link') );
     }
 
     /**
@@ -15,15 +16,20 @@ Class RDP_Main_Screen {
      * @since 1.0.0
      */
     function rdp_add_admin_menu(){
-        add_menu_page(
-            __( 'Remove Duplicate Posts', 'textdomain' ),
+        add_submenu_page(
+            'tools.php',
+            __( 'Remove Duplicate Posts', 'rdp_textdomain' ),
             'Remove Duplicate Posts',
             'manage_options',
             'remove-duplicate-posts',
-            array($this,'rdp_main_screen_content'),
-            'dashicons-admin-page',
-            99
+            array($this,'rdp_main_screen_content')
         );
+    }
+
+    function rdp_settling_link( $links ) {
+        $settings_link = '<a href="tools.php?page=remove-duplicate-posts">' . __( 'Settings' ) . '</a>';
+        array_push( $links, $settings_link );
+        return $links;
     }
 
     /**
@@ -91,8 +97,14 @@ Class RDP_Main_Screen {
         global $wpdb;
 
         if( $_POST['target'] == 'remove_duplicates_posts' ) {
-            wp_delete_post( $_POST['duplicate_ids_to_remove'] );
-            echo $_POST['duplicate_ids_to_remove'];
+            $dp_ids = $_POST['duplicate_ids_to_remove'];
+            $duplicate_ids = explode(',',$dp_ids);
+            foreach( $duplicate_ids as $dp_id ) {
+                if( !empty($dp_id) ) {
+                    wp_delete_post( $dp_id );
+                    echo $dp_id.'-';
+                }
+            }
         }
 
         $query_status = ''; $query_title = '';

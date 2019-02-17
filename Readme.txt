@@ -1,14 +1,14 @@
 === Remove Duplicate Posts ===
 Contributors: Muhammad Rehman
-Tags: delete duplicate posts, remove duplicate posts, delete posts, remove posts, bulk delete posts
+Tags: delete duplicate posts, remove duplicate posts, remove duplicate pages, remove pages, delete posts, remove posts, bulk delete posts
 Requires at least: 4.0
-Tested up to: 4.9.6
-Stable tag: 1.0.1
+Tested up to: 5.0.3
+Stable tag: 1.0.3
 License: GPLv2
 License URI: GPLv2
 
 == Description ==
-You can easily remove duplicate posts of any post type with one click. Just you need to select a post type which you want to remove the duplicates, and hit the delete button. This will remove all your duplicate posts with clean way.
+You can easily remove duplicate posts of any post type with one click. Just you need to select a post type which you want to remove the duplicates, and hit the delete button. This will remove all your duplicate posts with a progress bar to let you know how delete process is going :)
 
 == Installation ==
 To add a WordPress Plugin using the built-in plugin installer:
@@ -23,16 +23,25 @@ If successful, click Activate Plugin to activate it, or Return to Plugin Install
 
 == Screenshots ==
 
-1. Remove Post Option
-2. Advanced Settings
-3. Logs of Duplicate Posts
-4. Removing Duplicate Posts
-5. Duplicate Posts Removed
+1. Go to Settings
+2. Remove Post Option
+3. Advanced Settings
+4. Logs of Duplicate Posts
+5. Removing Duplicate Posts
+6. Duplicate Posts Removed
 
 == Changelog ==
 
+= 1.0.3 =
+- Added Freemius
+
+= 1.0.2 =
+- Improvement | Speed up queries to delete posts
+- Improvement | Move menu under Tools
+- Improvement | Add setting link in plugins page
+
 = 1.0.1 =
-- Bug Fixed | removing limited duplicate posts issue fixed
+- Bug Fixed | Removing limited duplicate posts issue fixed
 
 = 1.0.0 =
 - Initial release.
