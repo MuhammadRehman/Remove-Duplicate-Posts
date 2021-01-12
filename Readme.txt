@@ -2,8 +2,8 @@
 Contributors: Muhammad Rehman
 Tags: delete duplicate posts, remove duplicate posts, remove duplicate pages, remove pages, delete posts, remove posts, bulk delete posts
 Requires at least: 4.0
-Tested up to: 5.0.3
-Stable tag: 1.0.3
+Tested up to: 5.6
+Stable tag: 1.1
 License: GPLv2
 License URI: GPLv2
 
@@ -31,6 +31,12 @@ If successful, click Activate Plugin to activate it, or Return to Plugin Install
 6. Duplicate Posts Removed
 
 == Changelog ==
+
+= 1.1 =
+- New - "Match exact title" Option added in Search Duplication
+- Fix - Bug fixes
+- Improvement - Code Optimization
+- Improvement - Style changes
 
 = 1.0.3 =
 - Added Freemius

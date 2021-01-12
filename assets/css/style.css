@@ -22,18 +22,18 @@
 
 .rdp-select-post select {
     font-size: 20px;
-    padding: 6px;
+    padding: 0px 10px;
     margin: 5px;
     height: 44px;
     width: 35%;
-    border-radius: 18px;
+    border-radius: 5px;
 }
 
 input.rdp-btn {
-    background-color: #5fef5f;
+    background-color: #007cba;
     border: none;
     color: white;
-    padding: 8px;
+    padding: 10px 20px;
     border-radius: 10px;
     font-size: 17px;
     height: 42px;
@@ -109,13 +109,9 @@ input.rdp-btn {
     width: 10%;
     margin-left: 51%;
     text-decoration: underline;
-    margin: 5px 51%;
-    color: green;
+    margin: 5px 49%;
+    color: #007cba;
     cursor: pointer;
-}
-
-.rdp-adv-setting-content {
-    display: none;
 }
 
 .rdp-result {
@@ -146,7 +142,7 @@ input.rdp-btn {
 .rdp-progress-fill {
     text-align: center;
     width: 50%;
-    background-color: #38bd38;
+    background-color: #006799;
     height: 35px;
     border-radius: 20px;
     color: white;
@@ -155,7 +151,7 @@ input.rdp-btn {
 }
 
 select#rdp-post-status {
-    padding: 6px;
+    padding: 0px 10px;
     height: 30px;
     font-size: 14px;
     border-radius: 5px;
@@ -170,4 +166,8 @@ input#rdp-title-contains {
 
 .rdp-lbl {
     font-weight: bold;
+}
+
+.rdp-adv-opt label {
+    margin-left: 20px;
 }

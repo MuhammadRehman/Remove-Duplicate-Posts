@@ -35,6 +35,7 @@ Class RDP_Main_Screen {
     /**
      * Main Screen Content
      * @since 1.0.0
+     * @version 1.1
      */
     function rdp_main_screen_content(){
         $html = '<div class="rdp-main-screen-wrapper">
@@ -50,9 +51,11 @@ Class RDP_Main_Screen {
         $html .= '</select>
                         <input type="button" class="rdp-btn search-duplicates" value="'. __('Search Duplicates','rdp_domain') .'">
                         
-                        <div class="rdp-adv-setting">Advanced Setting</div>
+                        <div class="rdp-adv-setting">Advanced Settings</div>
                         <div class="rdp-adv-setting-content">
                             <div class="rdp-adv-opt">
+                                <label for="rdp-match-title" class="rdp-match-title rdp-lbl">'.__('Match exact title','rdp_domain').'</label>
+                                <input type="checkbox" class="rdp-match-title" id="rdp-match-title">
                                 <label for="rdp-title-contains" class="rdp-title-contains rdp-lbl">'.__('Title Contains','rdp_domain').'</label>
                                 <input type="text" class="rdp-title-contains" id="rdp-title-contains">
                                 <label for="rdp-post-status" class="rdp-post-status rdp-lbl">'.__('Post Status','rdp_domain').'</label>
@@ -92,6 +95,7 @@ Class RDP_Main_Screen {
      * Ajax Call Back Function
      * Performing Ajax Queries
      * @since 1.0.0
+     * @version 1.2
      */
     function rdp_ajax_process() {
         global $wpdb;
@@ -101,7 +105,7 @@ Class RDP_Main_Screen {
             $duplicate_ids = explode(',',$dp_ids);
             foreach( $duplicate_ids as $dp_id ) {
                 if( !empty($dp_id) ) {
-                    wp_delete_post( $dp_id );
+                    wp_delete_post( $dp_id, false );
                     echo $dp_id.'-';
                 }
             }
@@ -115,7 +119,8 @@ Class RDP_Main_Screen {
         if( $_POST['target'] == 'search_duplicates' ) { // Setup WP_Query as per search
             $selected_post_type = $_POST['selected_post_type'];
             $title_s = array();
-            if( isset( $_POST['title_contains'] ) && !empty( $_POST['title_contains'] ) ) {
+
+            if( !empty( $_POST['title_contains'] ) ) {
                 $title_s['s'] = $_POST['title_contains'];
                 $args = array(
                     'post_type' => $selected_post_type,
@@ -129,74 +134,101 @@ Class RDP_Main_Screen {
                 );
             }
 
+            $args = array(
+                'post_type' => $selected_post_type,
+                'posts_per_page' => -1,
+                'orderby' => 'date',
+                'order'   => 'ASC',
+            );            
+
             $getting_all_posts = new WP_Query( $args );
-            $total_posts = 0;
+
+            $total_posts = 0; 
             if ( $getting_all_posts->have_posts() ) {
 
-                $found_duplicates_posts = array(); $found_duplicates = array();
-                $html = '';
-                while ( $getting_all_posts->have_posts() ) {
+                $found_duplicates = array();
+                $html = ''; $skip = false;
+                while ( $getting_all_posts->have_posts() ) {   
                     $getting_all_posts->the_post();
-                    $title = get_the_title();
 
-                    // Clear Array
-                    unset($found_duplicates);
+                    $operator = '=';
+                    if( !empty( $_POST['title_contains'] ) ) {                        
+                        $title = '%'.$_POST['title_contains'].'%';
+                        $operator = 'LIKE';
+                    } else if( $_POST['match_title'] == 'yes' ) {
+                        $title = get_the_title();
+                    } else {
+                        $title = '%'.get_the_title().'%';
+                        $operator = 'LIKE';
+                    }
+
+                    $current_post_ID = get_the_ID();
+                    $skip = false;                    
+                    
+                    foreach( $found_duplicates as $duplicate_ids => $duplicates) {                        
+                        if( $current_post_ID == $duplicate_ids ) {                            
+                            $skip = true;
+                            break;
+                        }
+                    }
+
+                    if( $skip == true ) {                        
+                        continue;
+                    }
 
                     // Query to get all duplicate posts
                     $querystr = "
                         SELECT $wpdb->posts.ID
                         FROM $wpdb->posts
-                        WHERE $wpdb->posts.post_title = '".$title."'                        
+                        WHERE $wpdb->posts.post_title $operator '".$title."'
                         AND $wpdb->posts.post_type = '".$selected_post_type."'
                         ". $query_status ."
-                        ORDER BY $wpdb->posts.post_date DESC";
-
-                    $posts_found = $wpdb->get_results($querystr, OBJECT);
-
-                    // Getting Duplicate Ids
+                        ORDER BY $wpdb->posts.post_date ASC";
+                    
+                    $posts_found = $wpdb->get_results($querystr, OBJECT);                                        
+                    $post_count = 0;          
                     foreach( $posts_found as $post_ids ) {
-                        $found_duplicates[] = $post_ids->ID;
-                    }
+                        $post_count++;
+                        // Don't remove originla post
+                        if( $post_count == 1 && empty( $_POST['title_contains'] ) ) {
+                            continue;
+                        }
 
-                    // Make new array to store all the duplicate items
-                    if( count( $found_duplicates ) > 1 ) {
-                        $found_duplicates_posts[$title] = $found_duplicates;
-                    }
+                        $found_duplicates[$post_ids->ID] = get_the_title( $post_ids->ID );                       
+                    }                                        
                 }
-
+                
                 wp_reset_postdata();
             }
 
+            // Make new array to store all the duplicate items            
             $has_post = 0; $rdp_duplicate_ids = ''; $dp_msg = '';
 
-            // If Duplicate Posts Exists
-            foreach( $found_duplicates_posts as $dp_posts_key => $dp_posts_value ) {
-                $counter = 0;
+            if( count( $found_duplicates ) >= 1 ) {
+                // If Duplicate Posts Exists
+                foreach( $found_duplicates as $dup_post_id => $dp_posts_value ) {
+                    
+                    $html .= '<div class="rdp-dpl-product-title">'.$dp_posts_value.'</div>';            
+                        $total_posts++; 
+                        $rdp_duplicate_ids .= $dup_post_id.',';
 
-                $html .= '<div class="rdp-dpl-product-title">'.$dp_posts_key.'</div>';
-                foreach( $dp_posts_value as $dp_posts_ids ) {
-                    $counter++;
-                    if( count( $dp_posts_value ) == $counter )
-                        continue;
-
-                    $total_posts++;
-                    $rdp_duplicate_ids .= $dp_posts_ids.',';
-                    $html .= '<div class="rdp-duplicate-link"><a href="'. get_permalink( $dp_posts_ids ) .'">'.get_permalink( $dp_posts_ids ).'</a></div>';
+                        $html .= '<div class="rdp-duplicate-link"><a href="'. get_permalink( $dup_post_id ) .'">'.get_permalink( $dup_post_id ).'</a></div>';
+                        
+                    $has_post++;
                 }
-
-                $has_post++;
+                
+                $rdp_duplicate_ids = rtrim($rdp_duplicate_ids,',');
             }
-
-            $rdp_duplicate_ids = rtrim($rdp_duplicate_ids,',');
-
+            
             // Put Duplicate Ids in Hidden value to get it form Ajax/jQuery
-            if( !empty($rdp_duplicate_ids) ) {
+            if( !empty($rdp_duplicate_ids) && count( $found_duplicates ) >= 1 ) {
                 $html .= '<input type="hidden" id="rdp-duplicate-ids" value="'.$rdp_duplicate_ids.'" />';
                 $dp_msg = '<h2>'. ( $total_posts ) . __(' Duplicate Posts Found','rdp_domain') .'</h2>';
-            } else
-                $html .= '<div class="drp-response">'.__('No Duplicate Post Found <span class="dashicons dashicons-smiley"></span>','rdp_domain').'</div>';
-
+            } else {
+                $html .= '<div class="drp-response">'.__('No Duplicate Posts Found <span class="dashicons dashicons-smiley"></span>','rdp_domain').'</div>';
+            }
             $html = $dp_msg . $html;
+            
             echo $html;
         }
         wp_die();

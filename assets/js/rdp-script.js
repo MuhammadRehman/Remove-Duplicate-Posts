@@ -5,6 +5,12 @@ jQuery(document).ready(function($) {
         var selected_post_type = jQuery('.rdp-post-types').val();
         var title_contains = jQuery('#rdp-title-contains').val();
         var status = jQuery('#rdp-post-status').find(":selected").val();
+        var match_title = '';
+        if( jQuery('#rdp-match-title').is(':checked') ) {
+            match_title = 'yes';
+        } else {
+            match_title = 'no';
+        }
 
         rdp_show_loader();
 
@@ -15,6 +21,7 @@ jQuery(document).ready(function($) {
             'action': 'rdp_ajax_process',
             'selected_post_type': selected_post_type,
             'title_contains': title_contains,
+            'match_title': match_title,
             'status': status,
             'target': 'search_duplicates'
         };
@@ -111,7 +118,7 @@ jQuery(document).ready(function($) {
     }
 
     jQuery('.rdp-adv-setting').click(function () {
-        jQuery('.rdp-adv-setting-content').fadeIn();
+        jQuery('.rdp-adv-setting-content').toggle();
     });
 });
 
